@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Academic Writing — Complete MCQ Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0d1b2e;
+  --navy2: #132238;
+  --blue: #1a3a6b;
+  --accent: #c9a84c;
+  --accent2: #e8c97a;
+  --white: #ffffff;
+  --light: #f0ebe0;
+  --muted: #7a8299;
+  --correct: #27ae60;
+  --wrong: #c0392b;
+  --correct-bg: rgba(39,174,96,0.12);
+  --wrong-bg: rgba(192,57,43,0.12);
+  --card-bg: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--navy);
+  color:var(--white);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 5%, rgba(201,168,76,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 70% at 85% 95%, rgba(26,58,107,0.5) 0%, transparent 60%);
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ===== SCREENS ===== */
+.screen{display:none;position:relative;z-index:1;}
+.screen.active{display:block;}
+
+/* ===== LANDING ===== */
+#screen-landing{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:40px 20px;
+}
+.landing-inner{max-width:680px;}
+.landing-tag{
+  display:inline-block;
+  background:rgba(201,168,76,0.12);
+  border:1px solid rgba(201,168,76,0.35);
+  color:var(--accent2);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  padding:7px 20px;
+  border-radius:30px;
+  margin-bottom:28px;
+  animation:fadeDown 0.6s ease;
+}
+.landing-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(38px,6vw,68px);
+  font-weight:900;
+  line-height:1.08;
+  margin-bottom:16px;
+  animation:fadeDown 0.7s ease 0.1s both;
+}
+.landing-title span{color:var(--accent);}
+.landing-sub{
+  color:var(--muted);
+  font-size:16px;
+  font-weight:300;
+  line-height:1.7;
+  margin-bottom:48px;
+  animation:fadeDown 0.7s ease 0.2s both;
+}
+.parts-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:12px;
+  margin-bottom:40px;
+  animation:fadeUp 0.6s ease 0.3s both;
+}
+.part-chip{
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:16px 12px;
+  font-size:13px;
+  font-weight:500;
+  line-height:1.5;
+  color:rgba(255,255,255,0.75);
+}
+.part-chip strong{
+  display:block;
+  color:var(--accent);
+  font-size:11px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  margin-bottom:4px;
+}
+.btn-start{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:17px 48px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:var(--navy);
+  font-family:'DM Sans',sans-serif;
+  font-size:16px;
+  font-weight:700;
+  border:none;
+  border-radius:16px;
+  cursor:pointer;
+  transition:all 0.25s;
+  letter-spacing:0.3px;
+  animation:fadeUp 0.6s ease 0.4s both;
+}
+.btn-start:hover{
+  transform:translateY(-3px);
+  box-shadow:0 14px 36px rgba(201,168,76,0.35);
+}
+.total-badge{
+  display:inline-block;
+  background:rgba(201,168,76,0.1);
+  border:1px solid rgba(201,168,76,0.2);
+  border-radius:8px;
+  padding:4px 12px;
+  font-size:12px;
+  color:var(--accent2);
+  font-weight:600;
+  margin-bottom:32px;
+  animation:fadeUp 0.6s ease 0.25s both;
+}
+
+/* ===== QUIZ ===== */
+#screen-quiz{padding:0;}
+.quiz-header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(13,27,46,0.92);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:14px 24px;
+}
+.quiz-header-inner{
+  max-width:820px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+.quiz-logo{
+  font-family:'Playfair Display',serif;
+  font-size:17px;
+  font-weight:700;
+  color:var(--accent);
+  white-space:nowrap;
+}
+.progress-bar{
+  flex:1;
+  height:5px;
+  background:rgba(255,255,255,0.08);
+  border-radius:3px;
+  overflow:hidden;
+}
+.progress-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  border-radius:3px;
+  transition:width 0.45s cubic-bezier(0.4,0,0.2,1);
+  width:0%;
+}
+.progress-label{
+  font-size:13px;
+  font-weight:600;
+  color:var(--muted);
+  white-space:nowrap;
+}
+.score-pills{
+  display:flex;
+  gap:10px;
+  white-space:nowrap;
+}
+.pill{
+  padding:5px 12px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:700;
+}
+.pill-c{background:rgba(39,174,96,0.15);color:#6fcf97;border:1px solid rgba(39,174,96,0.25);}
+.pill-w{background:rgba(192,57,43,0.15);color:#eb5757;border:1px solid rgba(192,57,43,0.25);}
+
+.quiz-body{
+  max-width:820px;
+  margin:0 auto;
+  padding:40px 20px 80px;
+}
+
+.part-banner{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:28px;
+  animation:fadeDown 0.4s ease;
+}
+.part-banner-line{flex:1;height:1px;background:rgba(255,255,255,0.08);}
+.part-banner-text{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:2.5px;
+  text-transform:uppercase;
+  color:var(--accent);
+  padding:6px 16px;
+  border:1px solid rgba(201,168,76,0.3);
+  border-radius:20px;
+  background:rgba(201,168,76,0.06);
+}
+
+.question-card{
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:38px;
+  animation:slideIn 0.35s ease;
+}
+.q-meta{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:18px;
+}
+.q-num{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--accent);
+  background:rgba(201,168,76,0.1);
+  padding:4px 12px;
+  border-radius:8px;
+}
+.q-text{
+  font-size:19px;
+  font-weight:500;
+  line-height:1.65;
+  color:var(--white);
+  margin-bottom:30px;
+}
+.options{
+  display:flex;
+  flex-direction:column;
+  gap:11px;
+}
+.opt{
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+  padding:15px 18px;
+  border-radius:14px;
+  border:1.5px solid rgba(255,255,255,0.09);
+  cursor:pointer;
+  transition:all 0.2s ease;
+  background:rgba(255,255,255,0.02);
+  text-align:left;
+  width:100%;
+  color:rgba(255,255,255,0.82);
+  font-size:15px;
+  font-family:'DM Sans',sans-serif;
+  line-height:1.55;
+  font-weight:400;
+}
+.opt:hover:not(.disabled){
+  border-color:rgba(201,168,76,0.45);
+  background:rgba(201,168,76,0.07);
+  color:var(--white);
+  transform:translateX(5px);
+}
+.opt-letter{
+  width:30px;height:30px;min-width:30px;
+  border-radius:9px;
+  border:1.5px solid rgba(255,255,255,0.18);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;
+  transition:all 0.2s;
+  margin-top:1px;
+  flex-shrink:0;
+}
+.opt.correct{
+  border-color:var(--correct);
+  background:var(--correct-bg);
+  color:#c8f5da;
+}
+.opt.correct .opt-letter{
+  background:var(--correct);
+  border-color:var(--correct);
+  color:#fff;
+}
+.opt.wrong{
+  border-color:var(--wrong);
+  background:var(--wrong-bg);
+  color:#fcc;
+}
+.opt.wrong .opt-letter{
+  background:var(--wrong);
+  border-color:var(--wrong);
+  color:#fff;
+}
+.opt.reveal-correct{
+  border-color:rgba(39,174,96,0.5);
+  background:rgba(39,174,96,0.05);
+}
+.opt.reveal-correct .opt-letter{
+  border-color:var(--correct);
+  color:#6fcf97;
+}
+.opt.disabled{cursor:default;transform:none !important;}
+
+.explanation{
+  margin-top:22px;
+  padding:16px 20px;
+  border-radius:13px;
+  font-size:14px;
+  line-height:1.75;
+  display:none;
+  animation:fadeUp 0.3s ease;
+}
+.explanation.show{display:block;}
+.explanation.exp-c{
+  background:rgba(39,174,96,0.09);
+  border:1px solid rgba(39,174,96,0.22);
+  color:#a8e6c0;
+}
+.explanation.exp-w{
+  background:rgba(192,57,43,0.09);
+  border:1px solid rgba(192,57,43,0.22);
+  color:#f5aaaa;
+}
+.exp-label{
+  font-weight:700;
+  font-size:12px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  margin-bottom:6px;
+  display:block;
+}
+.exp-c .exp-label{color:#6fcf97;}
+.exp-w .exp-label{color:#eb5757;}
+
+.btn-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:26px;
+}
+.btn-next{
+  padding:13px 32px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:var(--navy);
+  font-family:'DM Sans',sans-serif;
+  font-size:14px;
+  font-weight:700;
+  border:none;
+  border-radius:13px;
+  cursor:pointer;
+  display:none;
+  align-items:center;
+  gap:8px;
+  transition:all 0.22s;
+  letter-spacing:0.3px;
+  margin-left:auto;
+}
+.btn-next:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(201,168,76,0.3);
+}
+.btn-next.show{display:flex;}
+
+/* ===== RESULTS ===== */
+#screen-results{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px 20px;
+}
+.results-inner{max-width:640px;width:100%;text-align:center;}
+.results-card{
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:26px;
+  padding:56px 44px;
+  backdrop-filter:blur(12px);
+  animation:fadeUp 0.6s ease;
+}
+.res-emoji{font-size:72px;display:block;margin-bottom:20px;}
+.res-title{
+  font-family:'Playfair Display',serif;
+  font-size:36px;
+  font-weight:900;
+  margin-bottom:6px;
+}
+.res-score{
+  font-family:'Playfair Display',serif;
+  font-size:80px;
+  font-weight:900;
+  color:var(--accent);
+  line-height:1;
+  margin:20px 0 6px;
+}
+.res-out{color:var(--muted);font-size:15px;margin-bottom:28px;}
+.grade-badge{
+  display:inline-block;
+  padding:8px 26px;
+  border-radius:25px;
+  font-size:14px;
+  font-weight:700;
+  margin-bottom:34px;
+  letter-spacing:0.5px;
+}
+.g-a{background:rgba(39,174,96,0.15);color:#6fcf97;border:1px solid rgba(39,174,96,0.3);}
+.g-b{background:rgba(201,168,76,0.15);color:var(--accent2);border:1px solid rgba(201,168,76,0.3);}
+.g-c{background:rgba(192,57,43,0.15);color:#eb5757;border:1px solid rgba(192,57,43,0.3);}
+.res-stats{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:14px;
+  margin-bottom:34px;
+}
+.res-stat{
+  background:rgba(255,255,255,0.04);
+  border-radius:15px;
+  padding:20px 12px;
+}
+.res-stat-num{
+  font-family:'Playfair Display',serif;
+  font-size:34px;
+  font-weight:700;
+  margin-bottom:5px;
+}
+.res-stat-label{font-size:12px;color:var(--muted);font-weight:500;letter-spacing:0.5px;}
+.rs-c .res-stat-num{color:#6fcf97;}
+.rs-w .res-stat-num{color:#eb5757;}
+.rs-p .res-stat-num{color:var(--accent);}
+.res-msg{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.7;
+  margin-bottom:32px;
+  font-style:italic;
+}
+.res-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.btn-restart{
+  padding:14px 36px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:var(--navy);
+  font-family:'DM Sans',sans-serif;
+  font-size:15px;
+  font-weight:700;
+  border:none;
+  border-radius:14px;
+  cursor:pointer;
+  transition:all 0.22s;
+}
+.btn-restart:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(201,168,76,0.35);}
+.btn-home{
+  padding:14px 36px;
+  background:transparent;
+  color:var(--white);
+  font-family:'DM Sans',sans-serif;
+  font-size:15px;
+  font-weight:600;
+  border:1.5px solid var(--border);
+  border-radius:14px;
+  cursor:pointer;
+  transition:all 0.22s;
+}
+.btn-home:hover{border-color:rgba(255,255,255,0.25);background:rgba(255,255,255,0.05);}
+
+/* ANIMATIONS */
+@keyframes fadeDown{from{opacity:0;transform:translateY(-22px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+@keyframes slideIn{from{opacity:0;transform:translateX(24px);}to{opacity:1;transform:translateX(0);}}
+
+@media(max-width:600px){
+  .question-card{padding:24px 18px;}
+  .quiz-header-inner{flex-wrap:wrap;gap:10px;}
+  .score-pills{display:none;}
+  .res-stats{grid-template-columns:1fr 1fr;}
+  .results-card{padding:36px 22px;}
+  .parts-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== LANDING ===== -->
+<div id="screen-landing" class="screen active">
+  <div class="landing-inner">
+    <div class="landing-tag">📚 Complete Study Tool</div>
+    <h1 class="landing-title">Academic Writing<br><span>Master Quiz</span></h1>
+    <p class="landing-sub">Answer every question correctly and you'll have mastered<br>the entire Academic Writing course — all 5 parts.</p>
+    <div class="total-badge">⚡ 80 Questions covering 100% of the material</div>
+    <div class="parts-grid">
+      <div class="part-chip"><strong>Part 1</strong>Scholarly Writing & Research Ethics</div>
+      <div class="part-chip"><strong>Part 2</strong>APA Paper Elements & Format</div>
+      <div class="part-chip"><strong>Part 3</strong>Style, Grammar & Phraseology</div>
+      <div class="part-chip"><strong>Part 4</strong>Academic Integrity & Citations</div>
+      <div class="part-chip"><strong>Part 5</strong>Organization, Definitions & Grammar</div>
+    </div>
+    <button class="btn-start" onclick="startQuiz()">Start the Quiz →</button>
+  </div>
+</div>
+
+<!-- ===== QUIZ ===== -->
+<div id="screen-quiz" class="screen">
+  <div class="quiz-header">
+    <div class="quiz-header-inner">
+      <div class="quiz-logo">AW Quiz</div>
+      <div class="progress-bar"><div class="progress-fill" id="prog-fill"></div></div>
+      <div class="progress-label" id="prog-label">1 / 80</div>
+      <div class="score-pills">
+        <div class="pill pill-c">✓ <span id="c-count">0</span></div>
+        <div class="pill pill-w">✗ <span id="w-count">0</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="quiz-body">
+    <div id="part-banner"></div>
+    <div class="question-card" id="q-card">
+      <div class="q-meta"><span class="q-num" id="q-num">Q1</span></div>
+      <div class="q-text" id="q-text"></div>
+      <div class="options" id="options"></div>
+      <div class="explanation" id="explanation">
+        <span class="exp-label" id="exp-label"></span>
+        <span id="exp-text"></span>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-next" id="btn-next" onclick="nextQuestion()">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== RESULTS ===== -->
+<div id="screen-results" class="screen">
+  <div class="results-inner">
+    <div class="results-card">
+      <span class="res-emoji" id="res-emoji"></span>
+      <div class="res-title" id="res-title"></div>
+      <div class="res-score" id="res-score"></div>
+      <div class="res-out" id="res-out"></div>
+      <div class="grade-badge" id="grade-badge"></div>
+      <div class="res-stats">
+        <div class="res-stat rs-c"><div class="res-stat-num" id="rs-c">0</div><div class="res-stat-label">Correct</div></div>
+        <div class="res-stat rs-w"><div class="res-stat-num" id="rs-w">0</div><div class="res-stat-label">Wrong</div></div>
+        <div class="res-stat rs-p"><div class="res-stat-num" id="rs-p">0%</div><div class="res-stat-label">Score</div></div>
+      </div>
+      <div class="res-msg" id="res-msg"></div>
+      <div class="res-btns">
+        <button class="btn-home" onclick="goHome()">← Back to Home</button>
+        <button class="btn-restart" onclick="restartQuiz()">🔄 Try Again</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ALL_QUESTIONS = [
+
+  // ==================== PART 1 ====================
+  {p:"Part 1 — Scholarly Writing & Research Ethics",
+   q:"What is scholarly writing?",
+   o:["Informal communication shared on social media","Formal academic communication that reports research findings to the scientific community","Creative writing published in literary magazines","Personal journals kept by researchers"],
+   a:1,e:"Scholarly writing is formal academic communication that reports research findings to the scientific community, most commonly through peer-reviewed journal articles."},
+
+  {p:"Part 1 — Scholarly Writing & Research Ethics",
+   q:"Why are peer-reviewed journal articles considered the primary medium of scholarly communication?",
+   o:["They are free to access online","They undergo rigorous expert evaluation, ensuring accuracy and credibility","They are shorter than books","They are written by students"],
+   a:1,e:"Peer-reviewed articles undergo rigorous evaluation by experts before publication, ensuring accuracy, credibility, and methodological soundness."},
+
+  {p:"Part 1 — Scholarly Writing & Research Ethics",
+   q:"Why is scholarly writing important for students specifically?",
+   o:["It helps them get better grades automatically","It develops critical thinking, self-reflection, and research skills","It replaces the need for exams","It allows them to skip lectures"],
+   a:1,e:"Academic writing develops critical thinking, self-reflection, and research skills, preparing students to contribute responsibly to scholarly knowledge."},
+
+  {p:"Part 1 — Scholarly Writing & Research Ethics",
+   q:"When must ethical considerations begin in the research process?",
+   o:["After collecting data","During the writing phase","Before research starts","Only when submitting for publication"],
+   a:2,e:"Ethical considerations must begin before research starts — issues like informed consent, institutional approval, and participant protection must be planned during the design stage."},
+
+  {p:"Part 1 — Scholarly Writing & Research Ethics",
+   q:"Which type of article reports original numerical data analyzed using statistical methods?",
+   o:["Qualitative article","Quantitative article","Theoretical article","Literature review"],
+   a:1,e:"Quantitative articles report original numerical data analyzed using statistical methods — they follow the IMRD structure."},
+
+  {p:"Part 1 — Scholarly Writing & Research Ethics",
+   q:"What is the correct structure of a quantitative research article?",
+   o:["Abstract, Body, Conclusion","Background, Methods, Analysis, Summary","Introduction, Method, Results, Discussion","Overview, Data, Findings, Recommendations"],
+   a:2,e:"Quantitative articles follow the IMRD structure: Introduction, Method, Results, and Discussion — reflecting the stages of the research process."},
+
+  {p:"Part 1 — Scholarly Writing & Research Ethics",
+   q:"Which characteristic defines qualitative research articles?",
+   o:["They use only statistical analysis","They analyze non-numerical data using iterative, reflexive analysis","They always use control groups","They require large sample sizes"],
+   a:1,e:"Qualitative research articles analyze non-numerical data such as language and observations, using an iterative and reflexive analysis process emphasizing context-dependent meanings."},
+
+  {p:"Part 1 — Scholarly Writing & Research Ethics",
+   q:"What is the defining feature of mixed methods research?",
+   o:["Using two different statistical methods","Intentional integration of qualitative and quantitative findings","Collecting data from two different countries","Having two researchers work together"],
+   a:1,e:"The defining feature of mixed methods research is intentional integration — combining both approaches to generate insights that neither could provide alone."},
+
+  {p:"Part 1 — Scholarly Writing & Research Ethics",
+   q:"How does mixed methods differ from multimethod research?",
+   o:["They are the same thing","Multimethod uses methods from the same tradition; mixed methods integrates across traditions","Mixed methods is purely quantitative","Multimethod always integrates findings"],
+   a:1,e:"Multimethod research uses multiple methods within the same methodological tradition (e.g., two qualitative methods), while mixed methods intentionally combines and integrates across qualitative and quantitative traditions."},
+
+  {p:"Part 1 — Scholarly Writing & Research Ethics",
+   q:"What is the purpose of replication studies?",
+   o:["To create new theories","To examine whether previous findings remain consistent when repeated","To summarize existing literature","To develop new research methods"],
+   a:1,e:"Replication studies examine whether findings from previous research remain consistent when repeated or modified, strengthening the reliability and generalizability of scientific findings."},
+
+  {p:"Part 1 — Scholarly Writing & Research Ethics",
+   q:"Which type of replication closely duplicates the original study without changes?",
+   o:["Conceptual replication","Approximate replication","Direct (exact) replication","Modified replication"],
+   a:2,e:"Direct (exact) replication closely duplicates the original study to verify its findings. Approximate replication introduces limited changes, and conceptual replication uses different methods to test the same idea."},
+
+  {p:"Part 1 — Scholarly Writing & Research Ethics",
+   q:"How does a meta-analysis differ from a literature review?",
+   o:["A meta-analysis is shorter","A meta-analysis statistically synthesizes results using effect sizes; a literature review provides a narrative summary","They are identical","A literature review uses statistics; a meta-analysis does not"],
+   a:1,e:"A meta-analysis synthesizes findings from multiple studies using systematic analytic techniques (like effect sizes), while a literature review provides a narrative summary and evaluation without formal statistical synthesis."},
+
+  {p:"Part 1 — Scholarly Writing & Research Ethics",
+   q:"What is the goal of a theoretical article?",
+   o:["To report original experimental data","To advance, refine, or critique theories","To summarize existing studies","To present new research methods"],
+   a:1,e:"Theoretical articles aim to advance, refine, or critique theories. They include empirical evidence only when it supports theory development."},
+
+  {p:"Part 1 — Scholarly Writing & Research Ethics",
+   q:"What is fabrication in academic research?",
+   o:["Using too many citations","Intentionally inventing data, participants, or results that never occurred","Copying another person's work","Submitting the same work twice"],
+   a:1,e:"Fabrication is the intentional invention of data, participants, observations, or results that never occurred. It is a serious ethical violation that introduces false information into the scientific record."},
+
+  {p:"Part 1 — Scholarly Writing & Research Ethics",
+   q:"What distinguishes falsification from fabrication?",
+   o:["They are the same violation","Falsification is deliberately altering real data; fabrication is inventing data","Falsification is less serious","Fabrication alters data; falsification invents it"],
+   a:1,e:"Fabrication involves inventing data that never existed. Falsification involves deliberately altering real research processes, materials, or data to mislead."},
+
+  {p:"Part 1 — Scholarly Writing & Research Ethics",
+   q:"What is selective reporting?",
+   o:["Citing too many sources","Presenting only favorable results while omitting non-significant or contradictory findings","Using only qualitative data","Reporting methods in detail"],
+   a:1,e:"Selective reporting presents only favorable results while omitting relevant non-significant or contradictory findings, providing an incomplete and biased account of the research."},
+
+  {p:"Part 1 — Scholarly Writing & Research Ethics",
+   q:"How should hypotheses be classified in ethical research reporting?",
+   o:["All hypotheses should be labeled as primary","As preplanned primary, preplanned secondary, or exploratory (post hoc)","Hypotheses don't need to be classified","As proven or unproven"],
+   a:1,e:"Hypotheses should be classified as preplanned primary, preplanned secondary, or exploratory (post hoc). This transparency prevents misleading representations of research intent."},
+
+  {p:"Part 1 — Scholarly Writing & Research Ethics",
+   q:"What must authors do if a major error is found after publication?",
+   o:["Ignore it if no one noticed","Publish a correction notice (erratum) for minor errors; retract the article for major errors like fabrication","Simply update their CV","Delete the online version"],
+   a:1,e:"Authors must publish correction notices (errata) for substantive errors. If errors seriously compromise the findings — such as fabrication — the article must be retracted."},
+
+  {p:"Part 1 — Scholarly Writing & Research Ethics",
+   q:"What is the central ethical principle underlying all scholarly writing?",
+   o:["Publishing as many papers as possible","Integrity — accuracy, participant protection, respect for intellectual property, and transparency","Getting high citation counts","Writing in the most complex style possible"],
+   a:1,e:"The central ethical principle is integrity — ensuring accuracy of findings, protecting research participants, respecting intellectual property, and maintaining transparency throughout the research and publication process."},
+
+  {p:"Part 1 — Scholarly Writing & Research Ethics",
+   q:"Why is data sharing more complex in qualitative research?",
+   o:["Qualitative data is always too large to share","Qualitative data often contains sensitive, identifiable information that may violate participant confidentiality","Qualitative researchers never share data","Journals don't allow qualitative data sharing"],
+   a:1,e:"Qualitative data often contain sensitive, identifiable, or context-specific information. Sharing may violate participant confidentiality, cultural trust, or consent agreements, requiring additional ethical safeguards."},
+
+  // ==================== PART 2 ====================
+  {p:"Part 2 — APA Paper Elements & Format",
+   q:"What does APA stand for?",
+   o:["Academic Publishing Association","American Psychological Association","Association for Professional Authors","Applied Psychology Academy"],
+   a:1,e:"APA stands for American Psychological Association. It provides a standardized system for formatting academic papers and citing sources, widely used across social sciences."},
+
+  {p:"Part 2 — APA Paper Elements & Format",
+   q:"Which element is required in a professional APA paper but NOT in a student paper?",
+   o:["Page numbers","Reference list","Running head and abstract","Main text"],
+   a:2,e:"Professional papers require a running head, abstract, author note, and keywords. Student papers use a simplified format and typically omit these unless required by the instructor."},
+
+  {p:"Part 2 — APA Paper Elements & Format",
+   q:"What information appears on a student APA title page?",
+   o:["Only the paper title and author name","Paper title, author name, institutional affiliation, course number/name, instructor name, due date, page number","Abstract and keywords","Only the author's name and university"],
+   a:1,e:"A student title page includes: paper title, author name, institutional affiliation, course number and name, instructor name, assignment due date, and page number."},
+
+  {p:"Part 2 — APA Paper Elements & Format",
+   q:"How should an APA paper title be formatted?",
+   o:["Italicized, left-aligned, any length","Bold, centered, title case, ideally 12 words or fewer","Underlined, right-aligned","All capitals, centered"],
+   a:1,e:"The title should be clear and concise (12 words or fewer), written in title case, bold, and centered in the upper half of the title page. Avoid phrases like 'A Study of.'"},
+
+  {p:"Part 2 — APA Paper Elements & Format",
+   q:"What is the word limit for an APA abstract?",
+   o:["100 words","500 words","250 words","150 words"],
+   a:2,e:"Abstracts are limited to 250 words. They appear on a separate page after the title page and include the purpose, method, results, and conclusions of the study."},
+
+  {p:"Part 2 — APA Paper Elements & Format",
+   q:"What are keywords in APA style used for?",
+   o:["Replacing the abstract","Database indexing to help others find the paper","Providing definitions of terms","Creating the table of contents"],
+   a:1,e:"Keywords are 3-5 terms that describe the main concepts of a paper and help with database indexing, making the paper discoverable in academic databases."},
+
+  {p:"Part 2 — APA Paper Elements & Format",
+   q:"How are keywords formatted in APA style?",
+   o:["Bold, numbered list","Italicized label 'Keywords:' followed by lowercase terms separated by commas","Underlined, one per line","All caps, in alphabetical order"],
+   a:1,e:"Keywords appear below the abstract with the label 'Keywords:' in italics, followed by the terms in lowercase, separated by commas, indented from the left margin."},
+
+  {p:"Part 2 — APA Paper Elements & Format",
+   q:"What heading appears at the top of the main text in an APA paper?",
+   o:["Introduction","The word 'Body'","The paper title, bold and centered","The author's name"],
+   a:2,e:"The paper title (not 'Introduction') appears at the top of the main text, bold and centered. Writing 'Introduction' as a heading is incorrect in APA style."},
+
+  {p:"Part 2 — APA Paper Elements & Format",
+   q:"What is the important rule about APA subsections (Level 2 headings)?",
+   o:["You can have as many as you want","A Level 2 heading must be followed by at least two subsections — never just one","Level 2 headings are optional","Level 2 headings must always be italicized"],
+   a:1,e:"Writers should not create a single subsection. If a Level 2 heading is used, there must be at least two subsections at that level — you cannot have just one."},
+
+  {p:"Part 2 — APA Paper Elements & Format",
+   q:"What are the APA formatting standards for font and spacing?",
+   o:["14pt Arial, single-spaced","12pt Times New Roman or 11pt Calibri, double-spaced, 1-inch margins","10pt Times New Roman, double-spaced","Any readable font, 1.5-spaced"],
+   a:1,e:"APA requires a consistent font (12pt Times New Roman or 11pt Calibri), double-spacing throughout, and 1-inch margins on all sides."},
+
+  {p:"Part 2 — APA Paper Elements & Format",
+   q:"Where do page numbers appear in APA papers?",
+   o:["Bottom center of each page","Top right corner, starting from the title page","Top left corner only in professional papers","They are optional"],
+   a:1,e:"All APA papers include page numbers in the top right corner, starting from page 1 (title page). Student papers only have page numbers; professional papers also add a running head on the left."},
+
+  {p:"Part 2 — APA Paper Elements & Format",
+   q:"What is a running head?",
+   o:["A decorative element at the top of the title page","An abbreviated title in ALL CAPS placed flush left in the header — required for professional papers only","The author's name in the header","A brief summary at the top of each page"],
+   a:1,e:"A running head is an abbreviated version of the paper title, written in ALL CAPITALS, placed flush left in the header. It is required for professional papers submitted for publication, not student papers."},
+
+  {p:"Part 2 — APA Paper Elements & Format",
+   q:"What is the purpose of an author note?",
+   o:["To summarize the paper","To provide additional information: affiliations, funding, disclosures, acknowledgments, and contact details — required for professional papers","To list all the authors' qualifications","To replace the abstract"],
+   a:1,e:"An author note provides information such as author affiliations, funding sources, disclosures, acknowledgments, and contact details. It is required for professional papers but is not usually included in student papers."},
+
+  {p:"Part 2 — APA Paper Elements & Format",
+   q:"How should the APA reference list be formatted?",
+   o:["Single-spaced, no indentation, alphabetical","Double-spaced, hanging indent of 0.5 inches, alphabetical by author's last name, on a new page titled 'References' (bold, centered)","Numbered, single-spaced, chronological","Bulleted, double-spaced, by topic"],
+   a:1,e:"The reference list starts on a new page, titled 'References' (bold, centered). Entries are double-spaced, alphabetized by author's last name, and use a hanging indent of 0.5 inches."},
+
+  {p:"Part 2 — APA Paper Elements & Format",
+   q:"What is a hanging indent in the reference list?",
+   o:["The first line is indented and subsequent lines are at the margin","The first line is at the margin and subsequent lines are indented 0.5 inches","All lines are equally indented","Only the last line is indented"],
+   a:1,e:"A hanging indent means the first line of each reference entry is flush with the margin, while subsequent lines are indented 0.5 inches — the opposite of a paragraph indent."},
+
+  {p:"Part 2 — APA Paper Elements & Format",
+   q:"What are supplemental materials in APA, and how do they differ from appendices?",
+   o:["They are the same thing","Supplemental materials are online-only files (datasets, videos) not printed in the paper; appendices are printed at the end of the paper","Appendices are online-only; supplemental materials are printed","Supplemental materials go before the references"],
+   a:1,e:"Supplemental materials are online-only files (datasets, videos, large tables) submitted with the manuscript but not printed. Appendices are included at the end of the printed paper."},
+
+  {p:"Part 2 — APA Paper Elements & Format",
+   q:"What is the correct order of pages in an APA paper?",
+   o:["Abstract, Title Page, Text, References","Title Page, Abstract, Main Text, References, Footnotes, Tables, Figures, Appendices","Main Text, Title Page, References, Abstract","Title Page, Text, Appendices, References, Abstract"],
+   a:1,e:"The correct order is: Title Page → Abstract → Main Text → References → Footnotes → Tables → Figures → Appendices."},
+
+  // ==================== PART 3 ====================
+  {p:"Part 3 — Style, Grammar & Phraseology",
+   q:"What is the primary objective of scholarly writing?",
+   o:["To impress readers with complex vocabulary","Clear communication — presenting ideas in an orderly, logical, and concise manner","To demonstrate the author's creativity","To use as many citations as possible"],
+   a:1,e:"The main objective of scholarly writing is clear communication. This is achieved through orderly, logical, and concise presentation using precise word choice and sentence structure."},
+
+  {p:"Part 3 — Style, Grammar & Phraseology",
+   q:"Which of the following is NOT one of the four qualities of effective scholarly writing?",
+   o:["Continuity","Flow","Creativity","Conciseness"],
+   a:2,e:"The four qualities are Continuity, Flow, Conciseness, and Clarity. Creativity is not a quality of scholarly writing — in fact, creative devices like ambiguity can harm academic writing."},
+
+  {p:"Part 3 — Style, Grammar & Phraseology",
+   q:"What is the difference between continuity and flow?",
+   o:["They mean the same thing","Continuity = logical consistency of ideas throughout the paper; Flow = smooth sentence-to-sentence and paragraph-to-paragraph movement","Flow = logical consistency; Continuity = smooth reading","Continuity is about grammar; Flow is about content"],
+   a:1,e:"Continuity refers to logical consistency of concepts throughout the paper (big picture). Flow refers to the smooth, natural progression of ideas from sentence to sentence and paragraph to paragraph (reading experience)."},
+
+  {p:"Part 3 — Style, Grammar & Phraseology",
+   q:"Which transition word indicates a cause-effect relationship?",
+   o:["Moreover","However","Therefore","Furthermore"],
+   a:2,e:"'Therefore' indicates a cause-effect relationship. 'Moreover' and 'Furthermore' indicate addition, while 'However' indicates contrast."},
+
+  {p:"Part 3 — Style, Grammar & Phraseology",
+   q:"What is a noun string and why should it be avoided?",
+   o:["A list of verbs — they slow down the reader","A sequence of multiple nouns modifying a final noun — they confuse readers and obscure meaning","Using nouns instead of pronouns — it causes repetition","A sentence with no verbs — grammatically incorrect"],
+   a:1,e:"Noun strings are sequences of multiple nouns modifying a final noun (e.g., 'student performance improvement program analysis'). They confuse readers and should be restructured using verbs and prepositions."},
+
+  {p:"Part 3 — Style, Grammar & Phraseology",
+   q:"What is the difference between wordiness and redundancy?",
+   o:["They are the same problem","Wordiness = using more words than necessary; Redundancy = repeating the same meaning in different words","Wordiness = repetition; Redundancy = extra words","Wordiness affects grammar; Redundancy affects style"],
+   a:1,e:"Wordiness means using more words than necessary (e.g., 'at the present time' → 'now'). Redundancy means repeating the same meaning (e.g., 'completely unanimous'). Both weaken academic writing."},
+
+  {p:"Part 3 — Style, Grammar & Phraseology",
+   q:"Why should synonyms be used cautiously in academic writing?",
+   o:["Synonyms always improve writing","Using synonyms can unintentionally suggest differences in meaning — consistency is preferred over variety","Synonyms are never acceptable","Synonyms make texts too long"],
+   a:1,e:"In academic writing, using synonyms for the same concept can make readers think you mean different things. Consistency in terminology is preferred because it ensures precision and clarity."},
+
+  {p:"Part 3 — Style, Grammar & Phraseology",
+   q:"What is anthropomorphism in academic writing?",
+   o:["Studying human behavior","Attributing human actions or intentions to non-human entities like studies, data, or results","Using first-person pronouns","Writing about animals"],
+   a:1,e:"Anthropomorphism is attributing human actions to non-human entities (e.g., 'the study concluded,' 'the data argue'). It is discouraged because studies and data cannot act — researchers do."},
+
+  {p:"Part 3 — Style, Grammar & Phraseology",
+   q:"Which verb tense should be used in the Results section of an APA paper?",
+   o:["Present tense","Future tense","Past tense","Present perfect"],
+   a:2,e:"The Results section uses past tense because it describes what was found during the completed study. Present tense is used in the Discussion and Conclusions sections."},
+
+  {p:"Part 3 — Style, Grammar & Phraseology",
+   q:"When is passive voice preferred over active voice in academic writing?",
+   o:["Always — it sounds more formal","When the action or result is more important than who performed it","Never — active voice must always be used","When writing the introduction"],
+   a:1,e:"Passive voice is appropriate when the action or result is more important than the actor (e.g., 'The samples were stored at -20°C'). Active voice is generally preferred for clarity."},
+
+  {p:"Part 3 — Style, Grammar & Phraseology",
+   q:"What is the editorial 'we' and why should it be avoided?",
+   o:["Using 'we' for two authors — it's perfectly fine","Using 'we' to vaguely refer to people in general — it creates ambiguity and should be replaced with specific nouns","Using 'we' in collaborative papers — never acceptable","Using 'we' in the methodology section"],
+   a:1,e:"The editorial 'we' refers vaguely to people in general (e.g., 'We know that stress affects health'). It creates ambiguity and should be replaced with specific nouns like 'researchers' or 'humans.'"},
+
+  {p:"Part 3 — Style, Grammar & Phraseology",
+   q:"When should singular 'they' be used in APA style?",
+   o:["Never — it is grammatically incorrect","When referring to individuals whose gender is unknown or who use 'they' as their pronoun","Only in informal writing","Only when referring to groups"],
+   a:1,e:"Singular 'they' is used to refer to individuals whose gender is unknown or who use 'they' as their pronoun. It is inclusive, grammatically acceptable, and recommended in APA Style."},
+
+  {p:"Part 3 — Style, Grammar & Phraseology",
+   q:"What is the difference between restrictive and nonrestrictive clauses?",
+   o:["Restrictive clauses use 'which' with commas; nonrestrictive use 'that' without commas","Restrictive clauses (essential to meaning) use 'that' without commas; nonrestrictive (extra information) use 'which' with commas","They are interchangeable","Restrictive clauses always come first in a sentence"],
+   a:1,e:"Restrictive clauses are essential to the meaning and use 'that' without commas. Nonrestrictive clauses add extra information and use 'which' with commas. Example: 'The study that used a control group' vs. 'The study, which used a control group,'"},
+
+  {p:"Part 3 — Style, Grammar & Phraseology",
+   q:"What is a dangling modifier?",
+   o:["A modifier placed correctly","A modifier that has no clear referent in the sentence — the noun it modifies is absent or illogical","A modifier placed too far from the word it modifies","An adjective used as an adverb"],
+   a:1,e:"A dangling modifier has no clear referent in the sentence. Example: 'After analyzing the data, the results were surprising' — the results cannot analyze data. Fix: 'After analyzing the data, the researchers found surprising results.'"},
+
+  {p:"Part 3 — Style, Grammar & Phraseology",
+   q:"Why is parallel construction important?",
+   o:["It makes sentences longer","It presents similar ideas in similar grammatical forms, improving clarity and readability — especially in lists, comparisons, and compound sentences","It helps with citation formatting","It reduces the need for transitions"],
+   a:1,e:"Parallel construction presents similar ideas in similar grammatical forms, making writing clearer and easier to read. It is especially important in lists, comparisons, and compound sentences (e.g., 'to examine, to measure, and to compare' — not 'to examine, measuring, and comparison')."},
+
+  {p:"Part 3 — Style, Grammar & Phraseology",
+   q:"What is the Academic Phrasebank and is using it considered plagiarism?",
+   o:["A collection of stolen academic texts — using it is plagiarism","A collection of generic, discipline-neutral academic phrases to support writers — using it is NOT plagiarism since the phrases are content-free","A paid service for writing papers","A tool that generates complete papers automatically"],
+   a:1,e:"The Academic Phrasebank provides generic, discipline-neutral phrases to help writers structure research papers. Since the phrases express no original ideas and are content-free, using them appropriately is NOT plagiarism."},
+
+  {p:"Part 3 — Style, Grammar & Phraseology",
+   q:"Which phrase is an example of 'establishing importance' in a research introduction?",
+   o:["'However, little is known about...'","'The results indicate that...'","'X has become increasingly important in...'","'Future research should examine...'"],
+   a:2,e:"'X has become increasingly important in...' is used in introductions to establish the significance of the research topic. 'However, little is known about...' is used to identify a research gap."},
+
+  // ==================== PART 4 ====================
+  {p:"Part 4 — Academic Integrity & Citations",
+   q:"What are the three main purposes of citation?",
+   o:["Formatting, spacing, and referencing","Acknowledging influences, providing context, and maintaining integrity","Avoiding repetition, saving time, and impressing reviewers","Increasing word count, citing friends' work, and following trends"],
+   a:1,e:"Citations serve three main purposes: (1) Acknowledging influences — crediting researchers whose ideas shaped the work; (2) Providing context — allowing readers to trace ideas; (3) Maintaining integrity — preventing plagiarism."},
+
+  {p:"Part 4 — Academic Integrity & Citations",
+   q:"What does 'appropriate level of citation' mean?",
+   o:["Citing every sentence with at least three sources","Citing sources that directly influenced the work, without overloading or under-documenting — prioritizing sources you actually read","Citing only the most famous researchers","Citing as many sources as possible to appear thorough"],
+   a:1,e:"An appropriate level means citing sources that genuinely influenced your work, reading and verifying all cited sources, prioritizing primary sources, and avoiding unnecessary repetition of citations."},
+
+  {p:"Part 4 — Academic Integrity & Citations",
+   q:"What is undercitation and what problem does it cause?",
+   o:["Citing too many sources — it distracts readers","Not citing where needed — it leads to plagiarism or misrepresentation of others' ideas","Using informal sources — it reduces credibility","Citing too old sources — it makes research outdated"],
+   a:1,e:"Undercitation occurs when sources are not cited where they should be, leading to plagiarism or misrepresentation of ideas. Both overcitation and undercitation weaken academic writing."},
+
+  {p:"Part 4 — Academic Integrity & Citations",
+   q:"Is unintentional plagiarism still considered plagiarism?",
+   o:["No — only intentional plagiarism is punished","Yes — the absence of intent does not change the outcome; it still misleads readers about authorship","Only in professional publications","It depends on how much was plagiarized"],
+   a:1,e:"Yes. Unintentional plagiarism is still plagiarism because the absence of intent does not change the outcome — it still misleads readers about the authorship of ideas and violates academic integrity."},
+
+  {p:"Part 4 — Academic Integrity & Citations",
+   q:"Which action does NOT require a citation according to APA?",
+   o:["Paraphrasing another author's ideas","Referring to well-known common knowledge (e.g., 'The Earth orbits the Sun')","Directly quoting text","Reprinting a figure from another paper"],
+   a:1,e:"Common knowledge that is widely known and undisputed does not require a citation. However, paraphrasing ideas, direct quotations, using data, and reprinting figures all require proper citation."},
+
+  {p:"Part 4 — Academic Integrity & Citations",
+   q:"What is self-plagiarism and why is it unethical?",
+   o:["Citing your own published work correctly — it's always acceptable","Presenting previously published or submitted work as new — it misleads readers about originality and may violate copyright agreements","Reviewing your own writing before submitting","Writing about your own experiences"],
+   a:1,e:"Self-plagiarism occurs when an author presents previously published or submitted work as new. It is unethical because it misleads readers about originality, exaggerates available evidence, and may violate copyright agreements."},
+
+  {p:"Part 4 — Academic Integrity & Citations",
+   q:"What does the correspondence principle require?",
+   o:["Every citation must be from a peer-reviewed source","Every in-text citation must have a matching reference list entry, and every reference list entry must be cited in the text","All references must include a DOI","References must be listed chronologically"],
+   a:1,e:"The correspondence principle requires that every in-text citation has a matching reference list entry AND every reference list entry is cited in the text. This ensures accuracy and retrievability."},
+
+  {p:"Part 4 — Academic Integrity & Citations",
+   q:"Which of the following is an exception to the correspondence principle?",
+   o:["Peer-reviewed articles","Personal communications — cited in text only, not in the reference list","Textbooks","Any source published before 2000"],
+   a:1,e:"Personal communications (emails, conversations, phone calls) are cited in text only because they are unrecoverable sources. They do not appear in the reference list."},
+
+  {p:"Part 4 — Academic Integrity & Citations",
+   q:"How should secondary sources be cited in APA?",
+   o:["List both the original and secondary source in the reference list","Name the original author in text with 'as cited in' the secondary source; only the secondary source goes in the reference list","Cite only the original source","Use footnotes for secondary sources"],
+   a:1,e:"For secondary sources: name the original author in the text, indicate 'as cited in' the secondary source, and include only the secondary source in the reference list. Example: Smith (1980), as cited in Jones (2020)."},
+
+  {p:"Part 4 — Academic Integrity & Citations",
+   q:"How are personal communications cited in APA style?",
+   o:["They appear in the reference list only","They are cited in text only with the communicator's initials, surname, and exact date — they do NOT appear in the reference list","They require a full reference list entry","They are never cited"],
+   a:1,e:"Personal communications are cited in text only (e.g., J. A. Smith, personal communication, March 15, 2026). They do not appear in the reference list because readers cannot retrieve them."},
+
+  {p:"Part 4 — Academic Integrity & Citations",
+   q:"What is a narrative citation in APA?",
+   o:["A citation embedded in a story","The author's name appears as part of the sentence, followed by the year in parentheses. Example: Smith (2020) found that...","Both author and year in parentheses at end of sentence","A citation in a footnote"],
+   a:1,e:"In a narrative citation, the author's name is grammatically part of the sentence and the year appears in parentheses: 'Smith (2020) found that...' This focuses attention on the researcher."},
+
+  {p:"Part 4 — Academic Integrity & Citations",
+   q:"How do you cite a source with 3 or more authors in APA 7th edition?",
+   o:["List all authors every time","Use 'et al.' from the very first citation","List all authors the first time, then use 'et al.'","Use only the first author's name"],
+   a:1,e:"In APA 7th edition, sources with 3 or more authors use 'et al.' from the very first citation (e.g., Smith et al., 2020). This is a change from APA 6th edition."},
+
+  {p:"Part 4 — Academic Integrity & Citations",
+   q:"When citing a direct quotation in APA, what must you include?",
+   o:["Only the author and year","Author, year, and page number (or paragraph number for sources without pages)","Only the page number","The full title of the source"],
+   a:1,e:"Direct quotations require the author, year, AND page number (p. 45) or location indicator. Example: (Smith, 2020, p. 45). This allows readers to find the exact quote."},
+
+  {p:"Part 4 — Academic Integrity & Citations",
+   q:"What is the overarching principle guiding all citation practices?",
+   o:["Following journal-specific style guides","Academic integrity — honesty, transparency, respect for intellectual property, and accountability","Getting as many citations as possible","Impressing reviewers with the number of references"],
+   a:1,e:"The overarching principle is academic integrity — ensuring honesty, transparency, respect for intellectual property, and accountability in scholarly communication. Citations are the foundation of trust in academic writing."},
+
+  // ==================== PART 5 ====================
+  {p:"Part 5 — Organization, Definitions & Grammar",
+   q:"Why is clear communication prioritized over creativity in academic writing?",
+   o:["Because creativity is not valued in academia","Because the purpose is to convey knowledge, arguments, and evidence precisely — creative devices like ambiguity can obscure meaning","Because academic writing is always boring","Because creativity requires more time"],
+   a:1,e:"Academic writing prioritizes clear communication because its purpose is to convey knowledge precisely. Creative devices like ambiguity, exaggeration, or emotional language can obscure meaning and reduce accuracy and trust."},
+
+  {p:"Part 5 — Organization, Definitions & Grammar",
+   q:"What does 'old-to-new information flow' mean?",
+   o:["Starting with the oldest research and ending with the newest","Beginning each sentence with familiar information and ending with new information — this helps readers process ideas smoothly","Using chronological order in all sections","Repeating key terms from previous paragraphs"],
+   a:1,e:"Old-to-new flow means beginning each sentence with information the reader already knows (old) and ending with new information. This creates a logical chain that makes reading effortless."},
+
+  {p:"Part 5 — Organization, Definitions & Grammar",
+   q:"Where is general-to-specific organization most commonly used?",
+   o:["Conclusions and discussions","Introductions, literature reviews, and definitions","Method sections only","Reference lists"],
+   a:1,e:"General-to-specific organization (like a funnel) begins with broad background and narrows to specifics. It is most commonly used in introductions, literature reviews, and definitions."},
+
+  {p:"Part 5 — Organization, Definitions & Grammar",
+   q:"Where is specific-to-general organization most commonly used?",
+   o:["Introductions and abstracts","Discussions, conclusions, case studies, and historical writing","Methods sections","Literature reviews"],
+   a:1,e:"Specific-to-general organization begins with concrete data or examples and moves to broader conclusions. It is common in discussions, conclusions, case studies, and historical writing."},
+
+  {p:"Part 5 — Organization, Definitions & Grammar",
+   q:"What are the three elements of a formal sentence definition?",
+   o:["Term, example, and application","Term, class it belongs to, and distinguishing characteristics","Term, history, and synonyms","Term, antonym, and usage example"],
+   a:1,e:"A formal sentence definition includes: (1) The term being defined, (2) The class it belongs to, and (3) The distinguishing characteristics that make it unique from others in the same class."},
+
+  {p:"Part 5 — Organization, Definitions & Grammar",
+   q:"What makes an extended definition different from a short definition?",
+   o:["Extended definitions are only used in textbooks","Short definitions are one sentence; extended definitions span several sentences or paragraphs including history, types, examples, and applications","They are the same, just different lengths","Extended definitions don't include examples"],
+   a:1,e:"Short definitions are one-sentence explanations for familiar terms. Extended definitions are much longer, covering history, types, examples, what the concept is NOT, and applications — demonstrating deep understanding."},
+
+  {p:"Part 5 — Organization, Definitions & Grammar",
+   q:"Why are extended definitions especially important in academic exams?",
+   o:["They fill space on the page","They allow writers to clarify complex concepts, demonstrate disciplinary knowledge, and develop arguments in depth — showing the examiner you truly understand","They are easier to write than short definitions","Professors always require them"],
+   a:1,e:"Extended definitions in exams demonstrate deep understanding — they clarify complex concepts, show disciplinary knowledge, and develop arguments. A full paragraph definition shows mastery, not just memorization."},
+
+  {p:"Part 5 — Organization, Definitions & Grammar",
+   q:"What verb tense is used in the Discussion and Conclusions sections of an APA paper?",
+   o:["Past tense","Future tense","Present tense — because conclusions are still true now","Present perfect"],
+   a:2,e:"Present tense is used in Discussion and Conclusions sections because the interpretations and implications are presented as currently valid statements. Example: 'These findings suggest that...'"},
+
+  {p:"Part 5 — Organization, Definitions & Grammar",
+   q:"What is the problem with misplaced modifiers?",
+   o:["They make sentences too long","They are placed too far from the word they modify, creating ambiguity about what is being described","They are grammatically always wrong","They only affect passive voice sentences"],
+   a:1,e:"Misplaced modifiers are placed too far from the word they modify, creating ambiguity. Example: 'The researcher observed participants using a microscope' — who has the microscope? Fix: 'Using a microscope, the researcher observed participants.'"},
+
+  {p:"Part 5 — Organization, Definitions & Grammar",
+   q:"Which sentence demonstrates correct parallel construction?",
+   o:["'The study aimed to examine stress, measuring performance, and group comparison.'","'The study aimed to examine stress, to measure performance, and to compare groups.'","'The study aimed to examine stress, performance was measured, and comparing groups.'","'The study aimed at examining stress, measurement of performance, and to compare groups.'"],
+   a:1,e:"Parallel construction requires similar grammatical forms for similar ideas. 'To examine, to measure, and to compare' uses the same infinitive form throughout — this is correct parallel construction."},
+
+  {p:"Part 5 — Organization, Definitions & Grammar",
+   q:"Why is revision considered essential in academic writing?",
+   o:["Only to fix spelling errors","Because strong academic writing develops through multiple drafts — revising for content, organization, style, grammar, and citations transforms good writing into great writing","Because professors require multiple submissions","Only professional researchers need to revise"],
+   a:1,e:"Revision is essential because strong academic writing develops through multiple drafts. Revising for content accuracy, logical organization, appropriate style, grammatical correctness, and proper citations ensures the final product communicates effectively."},
+
+  {p:"Part 5 — Organization, Definitions & Grammar",
+   q:"What does hedging language do in academic writing?",
+   o:["Makes writing weaker and less confident","Accurately reflects the uncertainty inherent in scientific findings — avoiding absolute claims (e.g., 'may suggest' instead of 'proves')","Is only used in qualitative research","Makes readers doubt the entire study"],
+   a:1,e:"Hedging language (e.g., 'suggests,' 'may indicate,' 'appears to') accurately reflects scientific uncertainty. It is a sign of intellectual honesty, not weakness — science rarely proves absolute truths."},
+
+  {p:"Part 5 — Organization, Definitions & Grammar",
+   q:"Which sentence correctly avoids anthropomorphism?",
+   o:["'The study found that stress reduces performance.'","'The data claim that participants were stressed.'","'The researchers found that stress reduces performance.'","'The results believe the hypothesis is correct.'"],
+   a:2,e:"'The researchers found...' correctly attributes the action to the humans who performed it. Studies, data, and results cannot find, claim, or believe anything — only researchers can."},
+
+  {p:"Part 5 — Organization, Definitions & Grammar",
+   q:"What is jargon and how should it be handled?",
+   o:["Informal slang — always avoid it","Specialized terminology unfamiliar to non-experts — use only when necessary and define essential terms at first use","Transition words — use them frequently","Technical writing tools — always encouraged"],
+   a:1,e:"Jargon is specialized terminology unfamiliar to non-experts. It should be limited to essential terms only, and each term should be defined clearly at first use to ensure accessibility for readers from different backgrounds."},
+
+  {p:"Part 5 — Organization, Definitions & Grammar",
+   q:"What is the single most important principle that unifies ALL of academic writing?",
+   o:["Using the most citations possible","Publishing in the highest-ranked journals","Clear, honest, and responsible communication of knowledge — serving the reader and advancing human understanding","Writing in the most complex style to demonstrate expertise"],
+   a:2,e:"The unifying principle is clear, honest, and responsible communication of knowledge. Every rule — formatting, ethics, grammar, citations, style — exists to serve this single goal: communicating knowledge accurately and trustworthily."}
+];
+
+let current = 0;
+let correct = 0;
+let wrong = 0;
+let answered = false;
+let lastPart = "";
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startQuiz() {
+  current = 0; correct = 0; wrong = 0; answered = false; lastPart = "";
+  updateHeader();
+  renderQuestion();
+  showScreen('screen-quiz');
+  window.scrollTo(0,0);
+}
+
+function restartQuiz() { startQuiz(); }
+function goHome() { showScreen('screen-landing'); }
+
+function updateHeader() {
+  const total = ALL_QUESTIONS.length;
+  const pct = Math.round((current / total) * 100);
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = (current + 1) + ' / ' + total;
+  document.getElementById('c-count').textContent = correct;
+  document.getElementById('w-count').textContent = wrong;
+}
+
+function renderQuestion() {
+  const q = ALL_QUESTIONS[current];
+  answered = false;
+
+  // Part banner
+  const banner = document.getElementById('part-banner');
+  if (q.p !== lastPart) {
+    lastPart = q.p;
+    banner.innerHTML = `<div class="part-banner"><div class="part-banner-line"></div><div class="part-banner-text">${q.p}</div><div class="part-banner-line"></div></div>`;
+  } else {
+    banner.innerHTML = '';
+  }
+
+  document.getElementById('q-num').textContent = 'Q' + (current + 1);
+  document.getElementById('q-text').textContent = q.q;
+
+  const letters = ['A','B','C','D'];
+  const optsEl = document.getElementById('options');
+  optsEl.innerHTML = '';
+  q.o.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.innerHTML = `<span class="opt-letter">${letters[i]}</span><span>${opt}</span>`;
+    btn.onclick = () => selectAnswer(i);
+    optsEl.appendChild(btn);
+  });
+
+  const exp = document.getElementById('explanation');
+  exp.className = 'explanation';
+  exp.querySelector('#exp-text').textContent = '';
+
+  document.getElementById('btn-next').classList.remove('show');
+  updateHeader();
+
+  // Animate card
+  const card = document.getElementById('q-card');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = 'slideIn 0.35s ease';
+}
+
+function selectAnswer(chosen) {
+  if (answered) return;
+  answered = true;
+
+  const q = ALL_QUESTIONS[current];
+  const opts = document.querySelectorAll('.opt');
+  const letters = ['A','B','C','D'];
+  const isCorrect = chosen === q.a;
+
+  if (isCorrect) correct++;
+  else wrong++;
+
+  opts.forEach((opt, i) => {
+    opt.classList.add('disabled');
+    if (i === q.a) opt.classList.add(chosen === i ? 'correct' : 'reveal-correct');
+    if (i === chosen && !isCorrect) opt.classList.add('wrong');
+  });
+
+  const exp = document.getElementById('explanation');
+  exp.className = 'explanation show ' + (isCorrect ? 'exp-c' : 'exp-w');
+  exp.querySelector('#exp-label').textContent = isCorrect ? '✓ Correct!' : '✗ Incorrect';
+  exp.querySelector('#exp-text').textContent = q.e;
+
+  document.getElementById('c-count').textContent = correct;
+  document.getElementById('w-count').textContent = wrong;
+  document.getElementById('btn-next').classList.add('show');
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= ALL_QUESTIONS.length) {
+    showResults();
+  } else {
+    renderQuestion();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+}
+
+function showResults() {
+  const total = ALL_QUESTIONS.length;
+  const pct = Math.round((correct / total) * 100);
+
+  let emoji, title, grade, gradeClass, msg;
+  if (pct >= 90) {
+    emoji = '🏆'; title = 'Outstanding!'; grade = 'Grade A — Mastery Level';
+    gradeClass = 'g-a'; msg = 'You have mastered the entire Academic Writing course. Every concept, every rule — you know it all. Well done!';
+  } else if (pct >= 75) {
+    emoji = '🎯'; title = 'Great Work!'; grade = 'Grade B — Strong Understanding';
+    gradeClass = 'g-b'; msg = 'You have a solid understanding of the material. Review the questions you missed and you\'ll be ready for the exam.';
+  } else if (pct >= 60) {
+    emoji = '📖'; title = 'Good Effort!'; grade = 'Grade C — Needs Review';
+    gradeClass = 'g-c'; msg = 'You know the basics but some areas need more attention. Re-read the parts you struggled with and try again.';
+  } else {
+    emoji = '💪'; title = 'Keep Going!'; grade = 'Needs More Study';
+    gradeClass = 'g-c'; msg = 'Don\'t give up! Review all five parts carefully and retake the quiz. Every attempt makes you stronger.';
+  }
+
+  document.getElementById('res-emoji').textContent = emoji;
+  document.getElementById('res-title').textContent = title;
+  document.getElementById('res-score').textContent = pct + '%';
+  document.getElementById('res-out').textContent = correct + ' out of ' + total + ' correct';
+  document.getElementById('grade-badge').textContent = grade;
+  document.getElementById('grade-badge').className = 'grade-badge ' + gradeClass;
+  document.getElementById('rs-c').textContent = correct;
+  document.getElementById('rs-w').textContent = total - correct;
+  document.getElementById('rs-p').textContent = pct + '%';
+  document.getElementById('res-msg').textContent = msg;
+
+  showScreen('screen-results');
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
